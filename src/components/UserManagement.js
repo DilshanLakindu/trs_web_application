@@ -313,7 +313,7 @@ const UserManagement = () => {
                     type="text"
                     className="form-control"
                     id="exampleFormControlInput150"
-                    placeholder="Ex: 987788555V"
+                    placeholder="Enter NIC"
                     onChange={(e) => setFilterNIC(e.target.value)}
                   />
                 </div>{" "}
@@ -329,7 +329,7 @@ const UserManagement = () => {
                     type="text"
                     className="form-control"
                     id="exampleFormControlInput10"
-                    placeholder="Ex: Sean Udayantha"
+                    placeholder="Enter Name"
                     onChange={(e) => setFilterName(e.target.value)}
                   />
                 </div>{" "}

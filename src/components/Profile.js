@@ -27,17 +27,21 @@ const Profile = () => {
       <div
         className="container"
         style={{
-          backgroundColor: "#FFF",
-          padding: "10px",
-          borderRadius: "20px",
+          backgroundColor: "white",
+          padding: "80px",
+          borderRadius: "10px",
           height: "auto",
-          opacity: "88%",
+          width: "700px",
+          opacity: "90%",
+          backgroundSize: "cover",
+          marginTop:"50px",
+          marginBottom:"100px"
         }}
       >
         <div class="container text-center">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-4">
-              <h1 style={{ color: "#000000" }}>Admin User Profile</h1>
+              <h2 style={{ color: "#000000" }}>Admin Profile</h2>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4"></div>
             <div class="col-xs-12 col-sm-12 col-md-4">
@@ -52,22 +56,43 @@ const Profile = () => {
         </div>
         <div class="container" style={{ padding: "35px" }}>
           <div class="row">
+            <div class ="col">
             <div class="mb-3">
               <label
                 for="formGroupExampleInput"
                 class="form-label"
                 style={{ color: "#000000" }}
               >
-                Name
+                First Name
               </label>
               <input
                 class="form-control"
                 type="text"
-                value="Disabled readonly input"
+                value={user.firstName}
                 aria-label="Disabled input example"
                 disabled
                 readonly
               />
+              </div>
+            </div>
+            <div class="col">
+            <div class="mb-3">
+              <label
+                for="formGroupExampleInput2"
+                class="form-label"
+                style={{ color: "#000000" }}
+              >
+                Last Name
+              </label>
+              <input
+                class="form-control"
+                type="text"
+                value={user.lastName}
+                aria-label="Disabled input example"
+                disabled
+                readonly
+              />
+            </div>
             </div>
             <div class="mb-3">
               <label
@@ -75,34 +100,18 @@ const Profile = () => {
                 class="form-label"
                 style={{ color: "#000000" }}
               >
-                Password
+                Email
               </label>
               <input
                 class="form-control"
                 type="text"
-                value="Disabled readonly input"
+                value={user.email}
                 aria-label="Disabled input example"
                 disabled
                 readonly
               />
             </div>
-            <div class="mb-3">
-              <label
-                for="formGroupExampleInput2"
-                class="form-label"
-                style={{ color: "#000000" }}
-              >
-                Role
-              </label>
-              <input
-                class="form-control"
-                type="text"
-                value="Disabled readonly input"
-                aria-label="Disabled input example"
-                disabled
-                readonly
-              />
-            </div>
+
             <div class="mb-3">
               <label
                 for="formGroupExampleInput2"
@@ -114,7 +123,7 @@ const Profile = () => {
               <input
                 class="form-control"
                 type="text"
-                value="Disabled readonly input"
+                value={user.nic}
                 aria-label="Disabled input example"
                 disabled
                 readonly
@@ -131,7 +140,7 @@ const Profile = () => {
               <input
                 class="form-control"
                 type="text"
-                value="Disabled readonly input"
+                value={user.phone}
                 aria-label="Disabled input example"
                 disabled
                 readonly
