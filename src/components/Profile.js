@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../assets/profile_picture.jpg";
+import { loadingActions } from "../store/loadingSlice";
+import { getAxiosInstance } from "../utils/axios";
+import { AutherizationAPI } from "../utils/api";
+import { authActions } from "../store/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {
-  const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
+  window.document.title = "User Profile";
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const token = useSelector((state) => state.auth.token);
+
+  // const [user, setUser] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   phone: "",
+  // });
+
+  const [user, setUser] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +36,26 @@ const Profile = () => {
     console.log("Admin user profile submitted:", user);
   };
 
+  useEffect(() => {
+    if (isLoggedIn && isLoggedIn) {
+      const getInfo = async () => {
+        try {
+          const res = await getAxiosInstance().get(AutherizationAPI.info, {
+            headers: { Authorization: `bearer ${token}` },
+          });
+          console.log(res.data);
+          setUser(res.data);
+          const name = res.data.name.split(" ");
+          setFirstName(name[0]);
+          setLastName(name[1]);
+        } catch (error) {
+          console.log("🚀 ~ file: Header.js:17 ~ getInfo ~ error:", error);
+        }
+      };
+      getInfo();
+    }
+  }, [isLoggedIn, token]);
+
   return (
     <>
       <div
@@ -34,8 +68,8 @@ const Profile = () => {
           width: "700px",
           opacity: "90%",
           backgroundSize: "cover",
-          marginTop:"50px",
-          marginBottom:"100px"
+          marginTop: "50px",
+          marginBottom: "100px",
         }}
       >
         <div class="container text-center">
@@ -46,7 +80,7 @@ const Profile = () => {
             <div class="col-xs-12 col-sm-12 col-md-4"></div>
             <div class="col-xs-12 col-sm-12 col-md-4">
               <img
-                src={profile}
+                src={user.imagePath}
                 width={150}
                 height={150}
                 style={{ borderRadius: "500px" }}
@@ -56,43 +90,43 @@ const Profile = () => {
         </div>
         <div class="container" style={{ padding: "35px" }}>
           <div class="row">
-            <div class ="col">
-            <div class="mb-3">
-              <label
-                for="formGroupExampleInput"
-                class="form-label"
-                style={{ color: "#000000" }}
-              >
-                First Name
-              </label>
-              <input
-                class="form-control"
-                type="text"
-                value={user.firstName}
-                aria-label="Disabled input example"
-                disabled
-                readonly
-              />
+            <div class="col">
+              <div class="mb-3">
+                <label
+                  for="formGroupExampleInput"
+                  class="form-label"
+                  style={{ color: "#000000" }}
+                >
+                  First Name
+                </label>
+                <input
+                  class="form-control"
+                  type="text"
+                  value={firstName}
+                  aria-label="Disabled input example"
+                  disabled
+                  readonly
+                />
               </div>
             </div>
             <div class="col">
-            <div class="mb-3">
-              <label
-                for="formGroupExampleInput2"
-                class="form-label"
-                style={{ color: "#000000" }}
-              >
-                Last Name
-              </label>
-              <input
-                class="form-control"
-                type="text"
-                value={user.lastName}
-                aria-label="Disabled input example"
-                disabled
-                readonly
-              />
-            </div>
+              <div class="mb-3">
+                <label
+                  for="formGroupExampleInput2"
+                  class="form-label"
+                  style={{ color: "#000000" }}
+                >
+                  Last Name
+                </label>
+                <input
+                  class="form-control"
+                  type="text"
+                  value={lastName}
+                  aria-label="Disabled input example"
+                  disabled
+                  readonly
+                />
+              </div>
             </div>
             <div class="mb-3">
               <label
@@ -140,7 +174,7 @@ const Profile = () => {
               <input
                 class="form-control"
                 type="text"
-                value={user.phone}
+                value={user.contactNo}
                 aria-label="Disabled input example"
                 disabled
                 readonly

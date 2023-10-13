@@ -20,6 +20,7 @@ const Login = () => {
       });
       localStorage.setItem("isLogin", true);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("nic", nic);
       dispatch(authActions.login(res.data.token));
       toast.info("Login Successful !", {
         position: "top-right",

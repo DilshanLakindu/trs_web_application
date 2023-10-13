@@ -14,6 +14,8 @@ import Button from "bootstrap/js/src/button";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  window.document.title = "Dashboard";
+
   const [isDasboardSelected, setIsDashboardSelected] = useState(true);
   const [isUserManagementSelected, setIsUserManagementSelected] =
     useState(false);

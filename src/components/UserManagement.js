@@ -287,7 +287,7 @@ const UserManagement = () => {
               style={{
                 borderBottomLeftRadius: "20px",
                 borderBottomRightRadius: "20px",
-                backgroundColor: "rgb(0, 0, 0,0.5)",
+                backgroundColor: "rgb(88, 98, 121,0.5)",
                 overflow: "auto",
               }}
             >
@@ -295,10 +295,11 @@ const UserManagement = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-around",
-                  marginTop: "10px",
+                  // marginTop: "10px",
                   marginBottom: "10px",
                   padding: "10px",
                   flexWrap: "wrap",
+                  backgroundColor: "#7a8eaa",
                 }}
               >
                 <div className="mb-3">
@@ -673,7 +674,7 @@ const UserManagement = () => {
               <br />
               <br />
               {users.length > 0 ? (
-                <div style={{ padding: "10px", overflow: "auto" }}>
+                <div style={{ padding: "10px 30px", overflow: "auto" }}>
                   <table className="table table-striped table-hover">
                     <thead className="thead-dark">
                       <tr className="table-primary">
@@ -707,7 +708,7 @@ const UserManagement = () => {
                                       }}
                                       style={{
                                         cursor: "pointer",
-                                        margin: "5px",
+                                        margin: "10px",
                                         borderRadius: "50px",
                                         justifyContent: "center",
                                         backgroundColor: "rgb(4, 4, 214)",
