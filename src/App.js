@@ -16,6 +16,9 @@ import DeactivateAccounts from "./utils/DeactivateAccounts";
 import Profile from "./components/Profile";
 import { ResetPassword } from "./components/ResetPassword";
 import UserManagement from "./screens/UserManagement";
+import TicketBookingManagement from "./components/TicketBookingManagement";
+import TrainManagement from "./components/TrainManagement";
+import TrainRouteRoutesManagement from "./components/TrainRoutesManagement";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -89,6 +92,54 @@ function App() {
                         <Unauthorized />
                       ) : user.isActive ? (
                         <UserManagement />
+                      ) : (
+                        <DeactivateAccounts />
+                      )
+                    ) : (
+                      <AuthScreen />
+                    )
+                  }
+                />
+                 <Route
+                  path="/tikets/manage"
+                  element={
+                    isLoggedIn ? (
+                      user.role == "traveler" ? (
+                        <Unauthorized />
+                      ) : user.isActive ? (
+                        <TicketBookingManagement />
+                      ) : (
+                        <DeactivateAccounts />
+                      )
+                    ) : (
+                      <AuthScreen />
+                    )
+                  }
+                />
+                   <Route
+                  path="/train/manage"
+                  element={
+                    isLoggedIn ? (
+                      user.role == "traveler" ? (
+                        <Unauthorized />
+                      ) : user.isActive ? (
+                        <TrainManagement />
+                      ) : (
+                        <DeactivateAccounts />
+                      )
+                    ) : (
+                      <AuthScreen />
+                    )
+                  }
+                />
+                   <Route
+                  path="/trainRoute/manage"
+                  element={
+                    isLoggedIn ? (
+                      user.role == "traveler" ? (
+                        <Unauthorized />
+                      ) : user.isActive ? (
+                        <TrainRouteRoutesManagement />
                       ) : (
                         <DeactivateAccounts />
                       )
