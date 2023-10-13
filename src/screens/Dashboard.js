@@ -145,6 +145,7 @@ const Dashboard = () => {
                 objectFit: "fill",
               }}
             />
+            <Link to="/tikets/manage">
             <button
               className="w-75 h-100 d-inline-block border-0 text-white"
               style={{
@@ -155,6 +156,7 @@ const Dashboard = () => {
             >
               Ticket Booking Management
             </button>
+            </Link>
           </div>
         </div>
         <div className="row gap-4 h-50 p-5">
@@ -168,6 +170,7 @@ const Dashboard = () => {
                 borderBottomLeftRadius: "5px",
               }}
             />
+            <Link to="/train/manage">
             <button
               className="w-75 h-100 d-inline-block border-0 text-white"
               style={{
@@ -178,6 +181,7 @@ const Dashboard = () => {
             >
               Train Management
             </button>
+            </Link>
           </div>
           <div className="col-sm">
             <img
@@ -190,6 +194,7 @@ const Dashboard = () => {
                 objectFit: "fill",
               }}
             />
+              <Link to="/trainRoute/manage">
             <button
               className="w-75 h-100 d-inline-block border-0 text-white"
               style={{
@@ -200,6 +205,7 @@ const Dashboard = () => {
             >
               Train Route Management
             </button>
+            </Link>
           </div>
         </div>
       </div>
