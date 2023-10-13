@@ -5,6 +5,7 @@ import { getAxiosInstance } from "../utils/axios";
 import { AutherizationAPI } from "../utils/api";
 import { authActions } from "../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   window.document.title = "User Profile";
@@ -179,6 +180,20 @@ const Profile = () => {
                 disabled
                 readonly
               />
+            </div>
+            <div className="mt-3 d-flex align-content-end justify-content-end">
+              <Link to="/">
+                <button
+                  className="btn btn-sm"
+                  style={{
+                    backgroundColor: "#5d0b49",
+                    color: "white",
+                    borderBottom: "2px solid #db3b8c",
+                  }}
+                >
+                  Go to Dashboard
+                </button>
+              </Link>
             </div>
           </div>
         </div>

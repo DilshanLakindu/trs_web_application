@@ -380,12 +380,12 @@ const UserManagement = () => {
               <div
                 style={{
                   cursor: "pointer",
-                  float: "left",
+                  float: "right",
                   borderRadius: "50px",
                   justifyContent: "center",
                   backgroundColor: "rgb(0, 163, 44)",
                   alignItems: "center",
-                  marginLeft: "15px",
+                  margin: "0px 30px",
                 }}
                 data-toggle="modal"
                 data-target="#exampleModalCenter"
@@ -394,7 +394,7 @@ const UserManagement = () => {
                   data-toggle="tooltip"
                   data-placement="bottom"
                   title="Create user"
-                  style={{ margin: "0px 20px" }}
+                  // style={{ margin: "0px 20px" }}
                 >
                   <center>
                     <img
@@ -410,7 +410,7 @@ const UserManagement = () => {
                         fontWeight: "bold",
                       }}
                     >
-                      Add User
+                      Add Train
                     </button>
                   </center>
                 </div>
