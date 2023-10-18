@@ -5,6 +5,8 @@ import ForgotPassword from "../components/ForgotPassword";
 import logo from "../assets/logo.png";
 
 const AuthScreen = () => {
+  window.document.title = "Login";
+
   const [showLogin, setShowLogin] = useState(true);
 
   const handleToggle = () => {

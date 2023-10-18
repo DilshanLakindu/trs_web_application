@@ -287,7 +287,7 @@ const UserManagement = () => {
               style={{
                 borderBottomLeftRadius: "20px",
                 borderBottomRightRadius: "20px",
-                backgroundColor: "rgb(0, 0, 0,0.5)",
+                backgroundColor: "rgb(88, 98, 121,0.5)",
                 overflow: "auto",
               }}
             >
@@ -295,10 +295,11 @@ const UserManagement = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-around",
-                  marginTop: "10px",
+                  // marginTop: "10px",
                   marginBottom: "10px",
                   padding: "10px",
                   flexWrap: "wrap",
+                  backgroundColor: "#7a8eaa",
                 }}
               >
                 <div className="mb-3">
@@ -313,7 +314,7 @@ const UserManagement = () => {
                     type="text"
                     className="form-control"
                     id="exampleFormControlInput150"
-                    placeholder="Ex: 987788555V"
+                    placeholder="Enter NIC"
                     onChange={(e) => setFilterNIC(e.target.value)}
                   />
                 </div>{" "}
@@ -329,7 +330,7 @@ const UserManagement = () => {
                     type="text"
                     className="form-control"
                     id="exampleFormControlInput10"
-                    placeholder="Ex: Sean Udayantha"
+                    placeholder="Enter Name"
                     onChange={(e) => setFilterName(e.target.value)}
                   />
                 </div>{" "}
@@ -379,12 +380,12 @@ const UserManagement = () => {
               <div
                 style={{
                   cursor: "pointer",
-                  float: "left",
+                  float: "right",
                   borderRadius: "50px",
                   justifyContent: "center",
                   backgroundColor: "rgb(0, 163, 44)",
                   alignItems: "center",
-                  marginLeft: "15px",
+                  margin: "0px 30px",
                 }}
                 data-toggle="modal"
                 data-target="#exampleModalCenter"
@@ -393,7 +394,7 @@ const UserManagement = () => {
                   data-toggle="tooltip"
                   data-placement="bottom"
                   title="Create user"
-                  style={{ margin: "0px 20px" }}
+                  // style={{ margin: "0px 20px" }}
                 >
                   <center>
                     <img
@@ -409,7 +410,7 @@ const UserManagement = () => {
                         fontWeight: "bold",
                       }}
                     >
-                      Add User
+                      Add Train
                     </button>
                   </center>
                 </div>
@@ -673,7 +674,7 @@ const UserManagement = () => {
               <br />
               <br />
               {users.length > 0 ? (
-                <div style={{ padding: "10px", overflow: "auto" }}>
+                <div style={{ padding: "10px 30px", overflow: "auto" }}>
                   <table className="table table-striped table-hover">
                     <thead className="thead-dark">
                       <tr className="table-primary">
@@ -707,7 +708,7 @@ const UserManagement = () => {
                                       }}
                                       style={{
                                         cursor: "pointer",
-                                        margin: "5px",
+                                        margin: "10px",
                                         borderRadius: "50px",
                                         justifyContent: "center",
                                         backgroundColor: "rgb(4, 4, 214)",

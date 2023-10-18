@@ -17,8 +17,8 @@ import Profile from "./components/Profile";
 import { ResetPassword } from "./components/ResetPassword";
 import UserManagement from "./screens/UserManagement";
 import TicketBookingManagement from "./components/TicketBookingManagement";
-import TrainManagement from "./components/TrainManagement";
-import TrainRouteRoutesManagement from "./components/TrainRoutesManagement";
+import TrainManagement from "./screens/TrainManagementScreen";
+import TrainRoutesMngScreen from "./screens/TrainRoutesMngScreen";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -100,7 +100,7 @@ function App() {
                     )
                   }
                 />
-                 <Route
+                <Route
                   path="/tikets/manage"
                   element={
                     isLoggedIn ? (
@@ -116,7 +116,7 @@ function App() {
                     )
                   }
                 />
-                   <Route
+                <Route
                   path="/train/manage"
                   element={
                     isLoggedIn ? (
@@ -132,14 +132,14 @@ function App() {
                     )
                   }
                 />
-                   <Route
+                <Route
                   path="/trainRoute/manage"
                   element={
                     isLoggedIn ? (
                       user.role == "traveler" ? (
                         <Unauthorized />
                       ) : user.isActive ? (
-                        <TrainRouteRoutesManagement />
+                        <TrainRoutesMngScreen />
                       ) : (
                         <DeactivateAccounts />
                       )

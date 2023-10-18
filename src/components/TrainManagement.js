@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import user_icon from "../assets/icons/user-solid.svg";
 import plus_icon from "../assets/icons/plus-solid.svg";
+import dropdown_icon from "../assets/icons/dropdown-svgrepo-com.svg";
+import close_icon from "../assets/icons/close-button-svgrepo-com.svg";
+import delete_icon from "../assets/icons/trash-solid.svg";
 import edit_icon from "../assets/icons/pen-to-square-solid.svg";
 import wrong_icon from "../assets/icons/wrong-svgrepo-com.svg";
 import photo_icon from "../assets/icons/camera-retro-solid.svg";
@@ -28,8 +31,11 @@ import {
 } from "../utils/TrainSheduleConfigData";
 import Select from "react-select";
 import ReactDatePicker from "react-datepicker";
+import { Link } from "react-router-dom";
 
 const TrainManagement = () => {
+  window.document.title = "Train Management";
+
   const inputFile = useRef(null);
   const token = useSelector((state) => state.auth.token);
   const auth = useSelector((state) => state.auth.user);
@@ -37,18 +43,34 @@ const TrainManagement = () => {
   const [ftrains, setFtrains] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [stopView, setStopView] = useState(false);
+  console.log(
+    "🚀 ~ file: TrainManagementScreen.js:42 ~ TrainManagement ~ stopView:",
+    stopView
+  );
   const [train, setTrain] = useState({
     name: "",
     imagePath:
       "https://res.cloudinary.com/amiladevin1998/image/upload/v1696069476/download_cmzzo6.png",
     registraionNo: "",
   });
-  console.log("🚀 ~ file: TrainManagement.js:46 ~ TrainManagement ~ train:", train)
+  console.log(
+    "🚀 ~ file: TrainManagementScreen.js:46 ~ TrainManagement ~ train:",
+    train
+  );
   const [callback, setCallback] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [isSEdit, setIsSEdit] = useState(false);
   const [filterRegNo, setFilterRegNo] = useState("");
   const [filterActive, setFilterActive] = useState("");
+
+  const trainStopView = () => {
+    if (stopView) {
+      setStopView(false);
+    } else {
+      setStopView(true);
+    }
+  };
 
   const getAllTrains = async () => {
     try {
@@ -60,7 +82,7 @@ const TrainManagement = () => {
       setFtrains(res.data);
     } catch (error) {
       console.log(
-        "🚀 ~ file: TrainManagement.js:45 ~ getAllTrains ~ error:",
+        "🚀 ~ file: TrainManagementScreen.js:45 ~ getAllTrains ~ error:",
         error
       );
 
@@ -83,6 +105,29 @@ const TrainManagement = () => {
     callback && getAllTrains();
     setCallback(false);
   }, [callback]);
+
+  useEffect(() => {
+    let trainList = ftrains;
+    if (trainList.length > 0 && (filterRegNo != null || filterRegNo != "")) {
+      trainList = trainList.filter((train) => {
+        return train.registraionNo
+          .toLowerCase()
+          .includes(filterRegNo.toLowerCase());
+      });
+    }
+    if (trainList.length > 0 && filterActive) {
+      trainList = trainList.filter((train) => {
+        return filterActive === "true" ? train.isActive : !train.isActive;
+      });
+    }
+
+    // if (trainList.length > 0 && filterNIC) {
+    //   trainList = trainList.filter((train) => {
+    //     return train.nic.toLowerCase().includes(filterNIC.toLowerCase());
+    //   });
+    // }
+    setTrains(trainList);
+  }, [filterActive, filterRegNo]);
 
   const createTrain = async () => {
     try {
@@ -134,7 +179,7 @@ const TrainManagement = () => {
       }
     } catch (error) {
       console.log(
-        "🚀 ~ file: TrainManagement.js:132 ~ createTrain ~ error:",
+        "🚀 ~ file: TrainManagementScreen.js:132 ~ createTrain ~ error:",
         error
       );
       toast.error(error.response ? error.response.data : error.message, {
@@ -153,80 +198,84 @@ const TrainManagement = () => {
   };
 
   const updateTrain = async () => {
-       try {
-         setLoadingBtn(true);
-         if (!train.registraionNo) {
-           toast.error("Train registration number requried", {
-             position: "top-right",
-             autoClose: 5000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-             theme: "light",
-           });
-           return;
-         } else if (!train.name) {
-           toast.error("Train name requried", {
-             position: "top-right",
-             autoClose: 5000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-             theme: "light",
-           });
-           return;
-         } else {
-           const res = await getAxiosInstance().put(
-             TrainsManagementAPI.update,
-             train,
-             {
-               headers: { Authorization: `bearer ${token}` },
-             }
-           );
-           toast.success("Train updated successfully", {
-             position: "top-right",
-             autoClose: 5000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-             theme: "light",
-           });
-           handleCreateModalClose();
-           setCallback(true);
-         }
-       } catch (error) {
-       console.log("🚀 ~ file: TrainManagement.js:204 ~ updateTrain ~ error:", error)
-     
-         toast.error(error.response ? error.response.data : error.message, {
-           position: "top-right",
-           autoClose: 5000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-           theme: "light",
-         });
-       } finally {
-         setLoadingBtn(false);
-       }
+    try {
+      setLoadingBtn(true);
+      if (!train.registraionNo) {
+        toast.error("Train registration number requried", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      } else if (!train.name) {
+        toast.error("Train name requried", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      } else {
+        const res = await getAxiosInstance().put(
+          TrainsManagementAPI.update,
+          train,
+          {
+            headers: { Authorization: `bearer ${token}` },
+          }
+        );
+        toast.success("Train updated successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        handleCreateModalClose();
+        setCallback(true);
+      }
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: TrainManagementScreen.js:204 ~ updateTrain ~ error:",
+        error
+      );
+
+      toast.error(error.response ? error.response.data : error.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } finally {
+      setLoadingBtn(false);
+    }
   };
 
   const changeActiveStatus = async (data) => {
     try {
       const res = await getAxiosInstance().put(
-        TrainsManagementAPI.activeAndDeactive + "/" + data.registraionNo,null,
+        TrainsManagementAPI.activeAndDeactive + "/" + data.registraionNo,
+        null,
         {
           headers: { Authorization: `bearer ${token}` },
         }
       );
-      toast.success("Train created successfully", {
+      toast.success("Train status updated successfully", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -239,7 +288,7 @@ const TrainManagement = () => {
       setCallback(true);
     } catch (error) {
       console.log(
-        "🚀 ~ file: TrainManagement.js:144 ~ changeActiveStatus ~ error:",
+        "🚀 ~ file: TrainManagementScreen.js:144 ~ changeActiveStatus ~ error:",
         error
       );
       toast.error(error.response ? error.response.data : error.message, {
@@ -316,7 +365,10 @@ const TrainManagement = () => {
   const [trainRoutesOptions, setTrainRoutesOptions] = useState([]);
   const [trainRoutesOptionsSelect, setTrainRoutesOptionsSelect] = useState("");
   const [trainStopsOptions, setTrainStopsOptions] = useState([]);
-  console.log("🚀 ~ file: TrainManagement.js:255 ~ TrainManagement ~ trainStopsOptions:", trainStopsOptions)
+  console.log(
+    "🚀 ~ file: TrainManagementScreen.js:255 ~ TrainManagement ~ trainStopsOptions:",
+    trainStopsOptions
+  );
   const [trainStopsOptionsSelect, setTrainStopsOptionsSelect] = useState([]);
   const [cancelDates, setCancelDates] = useState([]);
   const [dateCancelId, setDateCancelId] = useState(0);
@@ -336,12 +388,12 @@ const TrainManagement = () => {
     speed: "",
   });
   console.log(
-    "🚀 ~ file: TrainManagement.js:258 ~ TrainManagement ~ schedule:",
+    "🚀 ~ file: TrainManagementScreen.js:258 ~ TrainManagement ~ schedule:",
     schedule
   );
 
   const getShedules = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await getAxiosInstance().get(
         TrainScheduleManagementAPI.getSchedules + "/" + train.registraionNo,
@@ -352,7 +404,7 @@ const TrainManagement = () => {
       setShedules(res.data);
     } catch (error) {
       console.log(
-        "🚀 ~ file: TrainManagement.js:45 ~ getAllTrains ~ error:",
+        "🚀 ~ file: TrainManagementScreen.js:45 ~ getAllTrains ~ error:",
         error
       );
       toast.error(error.response ? error.response.data : error.message, {
@@ -365,8 +417,8 @@ const TrainManagement = () => {
         progress: undefined,
         theme: "light",
       });
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -398,7 +450,7 @@ const TrainManagement = () => {
       }
     } catch (error) {
       console.log(
-        "🚀 ~ file: TrainManagement.js:291 ~ getAllTrainRoutes ~ error:",
+        "🚀 ~ file: TrainManagementScreen.js:291 ~ getAllTrainRoutes ~ error:",
         error
       );
       toast.error(error.response ? error.response.data : error.message, {
@@ -446,7 +498,7 @@ const TrainManagement = () => {
       setSCallback(true);
     } catch (error) {
       console.log(
-        "🚀 ~ file: TrainManagement.js:357 ~ createTrainShedule ~ error:",
+        "🚀 ~ file: TrainManagementScreen.js:357 ~ createTrainShedule ~ error:",
         error
       );
       toast.error(error.response ? error.response.data : error.message, {
@@ -502,7 +554,7 @@ const TrainManagement = () => {
     const startMinute = parseInt(minutes, 10);
 
     // Calculate the end time by adding the travel time to the start time
-    const endMinute = startMinute + totalTravelTime;
+    let endMinute = startMinute + totalTravelTime;
     let endHour = startHour;
 
     // Adjust the end hour and minutes if they exceed 60
@@ -516,7 +568,10 @@ const TrainManagement = () => {
     const formattedEndMinute = endMinute.toString().padStart(2, "0");
     const endTime = `${formattedEndHour}:${formattedEndMinute}`;
 
-    console.log("🚀 ~ file: TrainManagement.js:452 ~ calculateTravelTime ~ endTime:", endTime)
+    console.log(
+      "🚀 ~ file: TrainManagementScreen.js:452 ~ calculateTravelTime ~ endTime:",
+      endTime
+    );
     return endTime;
   }
 
@@ -569,7 +624,7 @@ const TrainManagement = () => {
       for (const o of trainRoutesOptionsSelect.stations) {
         const data = {
           ...o,
-          label: o.order+". "+o.name,
+          label: o.order + ". " + o.name,
           value: o.name,
         };
         stations.push(data);
@@ -644,14 +699,31 @@ const TrainManagement = () => {
           </div>
         ) : (
           <div style={{ overflow: "auto" }}>
-            <div style={{ display: "flex", alignItems: "baseline" }}>
-              <img width={15} src={train_icon} />
-              <h5 style={{ marginLeft: "5px" }}>Train Management</h5>
+            <div className="mb-3 d-flex align-content-end justify-content-end">
+              <Link to="/">
+                <button className="btn btn-secondary">To Dashboard</button>
+              </Link>
             </div>
             <div
               style={{
-                borderRadius: "20px",
-                backgroundColor: "rgb(0, 0, 0,0.5)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "10px",
+                backgroundColor: "rgb(93, 11, 73  ,0.8)",
+                borderTopLeftRadius: "20px",
+                borderTopRightRadius: "20px",
+              }}
+            >
+              <center>
+                <h3 style={{ marginLeft: "5px" }}>Train Management</h3>
+              </center>
+            </div>
+            <div
+              style={{
+                borderBottomLeftRadius: "20px",
+                borderBottomRightRadius: "20px",
+                backgroundColor: "rgb(88, 98, 121,0.5)",
                 overflow: "auto",
               }}
             >
@@ -659,10 +731,11 @@ const TrainManagement = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-around",
-                  marginTop: "10px",
+                  // marginTop: "10px",
                   marginBottom: "10px",
                   padding: "10px",
                   flexWrap: "wrap",
+                  backgroundColor: "#7a8eaa",
                 }}
               >
                 <div className="mb-3">
@@ -677,7 +750,8 @@ const TrainManagement = () => {
                     type="text"
                     className="form-control"
                     id="exampleFormControlInput1500"
-                    placeholder="Ex: T0002"
+                    placeholder="Enter Train Registration No."
+                    style={{ borderBottom: "3px solid #04215b" }}
                     onChange={(e) => setFilterRegNo(e.target.value)}
                   />
                 </div>{" "}
@@ -691,6 +765,7 @@ const TrainManagement = () => {
                   <select
                     class="form-select"
                     aria-label="Default select example"
+                    style={{ borderBottom: "3px solid #04215b" }}
                     onChange={(e) => setFilterActive(e.target.value)}
                   >
                     <option value="" selected>
@@ -727,6 +802,16 @@ const TrainManagement = () => {
                         width={25}
                         src={plus_icon}
                       />
+                      <button
+                        className="bg-transparent border-0"
+                        style={{
+                          marginRight: "12px",
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Add Train
+                      </button>
                     </center>
                   </div>
                 </div>
@@ -869,89 +954,13 @@ const TrainManagement = () => {
                   </div>
                 </div>
               </div>
-              {/* <div
-                 className="modal fade"
-                 id="exampleModalCenter1"
-                 tabIndex="-1"
-                 role="dialog"
-                 aria-labelledby="exampleModalCenterTitle1"
-                 aria-hidden="true"
-               >
-                 <div
-                   className="modal-dialog modal-dialog-centered"
-                   role="document"
-                 >
-                   <div
-                     style={{
-                       borderRadius: "10px",
-                       backgroundColor: "#ffff",
-                       border: "none",
-                       color: "#0000 !important",
-                     }}
-                     className="modal-content"
-                   >
-                     <div className="modal-header">
-                       <h5
-                         style={{ color: "black" }}
-                         className="modal-title"
-                         id="exampleModalCenterTitle1"
-                       >
-                         Train Schedules
-                       </h5>
-                       <button
-                         style={{
-                           borderRadius: "50px",
-                           backgroundColor: "red",
-                           border: "none",
-                           color: "#ffff",
-                         }}
-                         type="button"
-                         data-dismiss="modal"
-                         aria-label="Close"
-                         onClick={handleCreateModalClose}
-                       >
-                         <span aria-hidden="true">&times;</span>
-                       </button>
-                     </div>
-                     <div style={{ color: "black" }} className="modal-body">
-                       <TrainScheduleManagement
-                         key={sCount}
-                         auth={auth}
-                         train={train}
-                         token={token}
-                         setKey={setKey}
-                       />
-                     </div>
-                     <div className="modal-footer">
-                       <button
-                         type="button"
-                         className="btn btn-secondary"
-                         data-dismiss="modal"
-                         onClick={handleCreateModalClose}
-                       >
-                         Close
-                       </button>
-                       {auth.role == "backoffice" && (
-                         <button
-                           type="button"
-                           className="btn btn-primary"
-                           data-dismiss="modal"
-                           // onClick={}
-                         >
-                           Save
-                         </button>
-                       )}
-                     </div>
-                   </div>
-                 </div>
-               </div> */}
               <br />
               <br />
               {trains.length > 0 ? (
-                <div style={{ padding: "10px", overflow: "auto" }}>
+                <div style={{ padding: "20px 30px", overflow: "auto" }}>
                   <table className="table table-striped table-hover">
                     <thead className="thead-dark">
-                      <tr>
+                      <tr className="table-primary">
                         <th scope="col"></th>
                         <th scope="col">Registration No</th>
                         <th scope="col">Train Name</th>
@@ -1012,10 +1021,7 @@ const TrainManagement = () => {
                             </div>
                           </td>
                           <td>
-                            <div
-                            //  data-toggle="modal1"
-                            //  data-target="#exampleModalCenter1"
-                            >
+                            <div>
                               <div
                                 onClick={() => {
                                   setTrain({
@@ -1093,27 +1099,6 @@ const TrainManagement = () => {
                                     </center>
                                   </div>
                                 </div>
-                                {/* <div
-                                  style={{
-                                    cursor: "pointer",
-                                    margin: "5px",
-                                    borderRadius: "50px",
-                                    justifyContent: "center",
-                                    backgroundColor: "rgb(181, 2, 2)",
-                                    alignItems: "center",
-                                  }}
-                                  data-toggle="tooltip"
-                                  data-placement="bottom"
-                                  title="Delete user"
-                                >
-                                  <center>
-                                    <img
-                                      style={{ margin: "10px" }}
-                                      width={10}
-                                      src={delete_icon}
-                                    />
-                                  </center>
-                                </div> */}
                               </div>
                             )}
                           </td>
@@ -1593,6 +1578,204 @@ const TrainManagement = () => {
                 <>
                   {
                     //TODO: BODY
+                    <>
+                      {schedules.map((train, index) => (
+                        <>
+                          <div
+                            className="container"
+                            style={{
+                              backgroundColor: "rgb(0,0,0,0.7)",
+                              padding: "32px",
+                              borderRadius: "20px",
+                              height: "auto",
+                              width: "98%",
+                              marginBottom: "10px",
+                            }}
+                            key={index}
+                          >
+                            <div
+                              class="row gy-3"
+                              style={{
+                                padding: "10px",
+                              }}
+                            >
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4"></div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4"></div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-end",
+                                    gap: "18px",
+                                  }}
+                                >
+                                  <div
+                                    onClick={() => {
+                                      setIsSEdit(true);
+                                      // setTrain({
+                                      //   ...train,
+                                      //   name: u.name,
+                                      //   registraionNo: u.registraionNo,
+                                      //   imagePath: u.imagePath,
+                                      // });
+                                    }}
+                                    style={{
+                                      cursor: "pointer",
+                                      margin: "5px",
+                                      borderRadius: "50px",
+                                      justifyContent: "center",
+                                      backgroundColor: "rgb(212, 194, 2)",
+                                      alignItems: "center",
+                                    }}
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="Edit Schedule"
+                                  >
+                                    <div
+                                      data-toggle="modal"
+                                      data-target="#exampleModalCenter3"
+                                    >
+                                      <center>
+                                        <img
+                                          style={{ margin: "10px" }}
+                                          width={10}
+                                          src={edit_icon}
+                                        />
+                                      </center>
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      cursor: "pointer",
+                                      margin: "5px",
+                                      borderRadius: "50px",
+                                      justifyContent: "center",
+                                      backgroundColor: "rgb(181, 2, 2)",
+                                      alignItems: "center",
+                                    }}
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="Delete Schedule"
+                                  >
+                                    <center>
+                                      <img
+                                        style={{ margin: "10px" }}
+                                        width={10}
+                                        src={delete_icon}
+                                      />
+                                    </center>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: "18px",
+                                  }}
+                                >
+                                  <h6>Start station</h6>
+                                  <h6>{train.startStation}</h6>
+                                </div>
+                              </div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4"></div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: "18px",
+                                  }}
+                                >
+                                  <h6>End station</h6>
+                                  <h6>{train.endStation}</h6>
+                                </div>
+                              </div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: "18px",
+                                  }}
+                                >
+                                  <h6>Start Time</h6>
+                                  <h6>{train.startTime}</h6>
+                                </div>
+                              </div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4"></div>
+                              <div class="col-12	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: "18px",
+                                  }}
+                                >
+                                  <h6>End Time</h6>
+                                  <h6>{train.endTime}</h6>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              className="container"
+                              style={{
+                                backgroundColor: "rgb(72, 74, 73,0.7)",
+                                padding: "10px",
+                                borderRadius: "20px",
+                                height: "auto",
+                                width: "98%",
+                              }}
+                            >
+                              <div
+                                class="row"
+                                style={{
+                                  padding: "10px",
+                                }}
+                              >
+                                <div class="col-4	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                  <h5>Train Stop</h5>
+                                </div>
+                                <div class="col-4	col-sm-12	col-md-4	col-lg-4	col-xl-4"></div>
+                                <div class="col-4	col-sm-12	col-md-4	col-lg-4	col-xl-4">
+                                  {!stopView ? (
+                                    <div onClick={() => trainStopView()}>
+                                      <center>
+                                        <img
+                                          style={{ margin: "10px" }}
+                                          width={25}
+                                          src={dropdown_icon}
+                                        />
+                                      </center>
+                                    </div>
+                                  ) : (
+                                    <div onClick={() => trainStopView()}>
+                                      <center>
+                                        <img
+                                          style={{ margin: "10px" }}
+                                          width={25}
+                                          src={close_icon}
+                                        />
+                                      </center>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              {stopView && (
+                                <>
+                                  {train.trainStops.map((stop, stopIndex) => (
+                                    <li key={stopIndex}>
+                                      {stop.trainStop.name} - {stop.navTime}
+                                    </li>
+                                  ))}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      ))}
+                    </>
                   }
                 </>
               ) : (
